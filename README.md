@@ -2,7 +2,8 @@
 Building an A-Z reproducible pipeline for precision nutrition analysis
 Team Members*
 NameGitHub UsernameGabrielle Viscardi[@gabrielleviscardi]Brighid McKay[@brighidmck]Diana Ghidanac[@??]
-* All members contributed equally to this project assignment.
+
+All members contributed equally to this project assignment.
   
 
 **Project Overview**
@@ -40,9 +41,6 @@ Examining whether maternal UPF intake is associated with distinct child growth t
 -	Pregnant women and their children, regardless of health status
 -	Population-representative of diverse socioeconomic and dietary backgrounds
 -	Infants followed longitudinally from birth through 24 months
-
--	
-<img width="468" height="101" alt="image" src="https://github.com/user-attachments/assets/2b35ba5f-8a80-4b35-8169-93e40015b769" />
 
 
 ##  Dataset Description
