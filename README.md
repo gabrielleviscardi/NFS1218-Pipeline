@@ -69,7 +69,7 @@ Mock longitudinal cohort, **n = 300** mother–child pairs.
 
 ---
 
-## 🧹 Data Cleaning Decisions
+## Data Cleaning Decisions
 
 All decisions are documented in code comments within `upf_zbmi_clustering_pipeline.R`.
 
