@@ -58,11 +58,34 @@ Mock longitudinal cohort, **n = 300** mother–child pairs.
 | `Maternal_BMI` | Continuous | Pre-pregnancy BMI |
 | `Household_income_index` | Continuous | Socioeconomic covariate |
 
+### Descriptive Statistics (before cleaning, n = 300)
+ 
+#### Primary Exposure and Outcome
+ 
+| Variable | n | Mean | SD | Min | Max | 95% CI |
+|----------|---|------|----|-----|-----|--------|
+| `Ultra_processed_score` | 300 | 0.478 | 0.273 | 0.00 | 1.00 | [0.449, 0.509] |
+| `zBMI_24m` | 300 | 0.033 | 1.107 | −2.24 | 7.28 | [−0.093, 0.159] |
+ 
+Key observations:
+- The mean UPF score of 0.478 indicates that on average, mothers obtained nearly half of their energy intake from ultra-processed foods, with wide individual variation (SD = 0.273)
+- The mean zBMI at 24 months is close to 0 (the WHO population median), as expected for a population-representative cohort
+- The maximum zBMI of 7.28 corresponds to the known outlier (ID 294) which exceeds the WHO +5 SD implausibility threshold and is removed during cleaning
+ 
+#### Additional Key Variables (from dataset documentation)
+ 
+| Variable | Distribution | Notes |
+|----------|-------------|-------|
+| `Sex` | ~50% Male / 50% Female | Balanced |
+| `Gestational_age_weeks` | Range: 34.1–44.8 weeks | Includes preterm births |
+| `WHO_zBMI_birth` | Centred near 0 | 11 values below −5 SD (implausible) |
+| `WHO_zBMI_12m` | Centred near 0 | 10% missing (n=30); 1 value below −5 SD |
+ 
 **Intentional data quality issues (part of the assignment):**
 - Implausible `Age_24m_months` values (n=6): IDs with ages of −3, 5, or 120 months
 - WHO zBMI outlier (n=1): one child with `zBMI_24m` = 7.28, exceeding the +5 SD threshold
 - Missing data (~10% each): `WHO_zBMI_12m`, `Fiber_intake_g`, `ALT`, `Shannon_diversity`
-
+ 
 ---
 
 ## Data Cleaning Decisions
