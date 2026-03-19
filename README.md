@@ -36,12 +36,8 @@ This project follows all stages of the **CRISP-DM framework** and applies WHO-st
 ├── data/
 │   ├── mock_precision_growth_dataset.csv   # Raw dataset (unmodified)
 │   └── clean_precision_growth_dataset.csv  # Cleaned dataset (output of Section 6)
-├── outputs/
-│   ├── final_clustered_data.csv            # Dataset with cluster assignments
-│   ├── cluster_profiles_summary.csv        # Cluster profile summary table
-│   └── figures/                            # All generated plots (19 figures)
-└── sessionInfo.txt                         # R session info for reproducibility
-```
+└── outputs/
+    └── figures/                            # All generated plots (19 figures)```
 
 ---
 
