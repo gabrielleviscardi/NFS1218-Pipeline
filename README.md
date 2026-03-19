@@ -1,19 +1,13 @@
 # NFS1218-Pipeline
 Building an A-Z reproducible pipeline for precision nutrition analysis
-
-**Project Overview**
-This project investigates whether maternal ultra-processed food (UPF) consumption is associated with distinct zBMI trajectory clusters in children from birth to 24 months.
-
-**Research Question:** Do children of mothers with higher UPF consumption scores belong to higher-risk zBMI growth clusters, and does maternal dietary quality predict cluster membership at 24 months?
-
-**Exposure**: Maternal UPF score at time of birth (continuous, range 0–1)
-**Outcome**: Offspring zBMI trajectory clusters (birth, 12m, 24m), and zBMI at 24 months
-**Method**: Growth trajectory clustering (K-means, PAM, Hierarchical) + multinomial logistic regression
-
 Team Members*
 NameGitHub UsernameGabrielle Viscardi[@gabrielleviscardi]Brighid McKay[@brighidmck]Diana Ghidanac[@??]
 * All members contributed equally to this project assignment.
   
+
+**Project Overview**
+This project investigates whether maternal ultra-processed food (UPF) consumption is associated with distinct zBMI trajectory clusters in children from birth to 24 months.
+
 ##  Repository Structure
 
 ```
@@ -31,10 +25,31 @@ NameGitHub UsernameGabrielle Viscardi[@gabrielleviscardi]Brighid McKay[@brighidm
 ```
 
 ---
+**Research Question:** Do children of mothers with higher UPF consumption scores belong to higher-risk zBMI growth clusters, and does maternal dietary quality predict cluster membership at 24 months?
+
+**Exposure**: Maternal UPF score at time of birth (continuous, range 0–1)
+**Outcome**: Offspring zBMI trajectory clusters (birth, 12m, 24m), and zBMI at 24 months
+**Method**: Growth trajectory clustering (K-means, PAM, Hierarchical) + multinomial logistic regression
+
+**Research Question Biololical/ Clinical Relevance:**
+Ultra-processed food (UPF) consumption is rising worldwide, increasingly displacing traditional and minimally processed diets. In Canada, UPFs contribute to nearly half of total daily energy intake among preschool-aged children. These products are industrially manufactured using additives not typically found in home cooking, designed to enhance taste, extend shelf life, and maximize profitability. While UPFs offer convenience, affordability, and microbiological safety, they are generally energy-dense and high in sugars, saturated fats, and sodium, while being low in fiber and essential nutrients.
+
+Examining whether maternal UPF intake is associated with distinct child growth trajectory patterns could help identify early-life targets for precision nutrition strategies aimed at reducing the risk of childhood overweight and obesity.
+
+**Target Population **
+-	Pregnant women and their children, regardless of health status
+-	Population-representative of diverse socioeconomic and dietary backgrounds
+-	Infants followed longitudinally from birth through 24 months
+
+-	
+<img width="468" height="101" alt="image" src="https://github.com/user-attachments/assets/2b35ba5f-8a80-4b35-8169-93e40015b769" />
+
 
 ##  Dataset Description
 
 **Source:** [Comelli Lab Open Code Library](https://github.com/Comelli-lab/Open_code_library/blob/master/Clustering_growth_trajectories/Data/mock_precision_growth_dataset.csv)
+
+<img width="468" height="191" alt="image" src="https://github.com/user-attachments/assets/4a0aed91-f2dd-4229-92b3-cb7e232d9a02" />
 
 Mock longitudinal cohort, **n = 300** mother–child pairs.
 
@@ -50,7 +65,7 @@ Mock longitudinal cohort, **n = 300** mother–child pairs.
 | `Maternal_BMI` | Continuous | Pre-pregnancy BMI |
 | `Household_income_index` | Continuous | Socioeconomic covariate |
 
-**Intentional data quality issues (part of the assignment):**
+**Intentional data quality issues :**
 - Implausible `Age_24m_months` values: IDs 2, 83, 144, 179, 192, 293 (ages of −3, 5, or 120 months)
 - WHO zBMI outlier: ID 294 (`zBMI_24m` = 7.28, exceeds +5 SD threshold)
 - Missing data (10% each): `WHO_zBMI_12m`, `Fiber_intake_g`, `ALT`, `Shannon_diversity`
