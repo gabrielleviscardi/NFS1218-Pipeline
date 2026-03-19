@@ -1,7 +1,9 @@
 # NFS1218-Pipeline
 Building an A-Z reproducible pipeline for precision nutrition analysis
+
 **Project Overview**
 This project investigates whether maternal ultra-processed food (UPF) consumption is associated with distinct zBMI trajectory clusters in children from birth to 24 months.
+
 **Research Question:** Do children of mothers with higher UPF consumption scores belong to higher-risk zBMI growth clusters, and does maternal dietary quality predict cluster membership at 24 months?
 
 **Exposure**: Maternal UPF score at time of birth (continuous, range 0–1)
