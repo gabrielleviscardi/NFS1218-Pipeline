@@ -23,7 +23,7 @@ This project follows all stages of the **CRISP-DM framework** and applies WHO-st
 |------|----------------|
 | Gabrielle Viscardi | [@gabrielleviscardi] |
 | Brighid McKay | [@brighidmck] |
-| Diana Ghidanac | [@username] |
+| Diana Ghidanac | [@deedee1912] |
 
 ---
 
