@@ -57,7 +57,7 @@ Mock longitudinal cohort, **n = 300** mother–child pairs.
 
 ---
 
-## 🧹 Data Cleaning Decisions
+## Data Cleaning Decisions
 
 All decisions are documented in code comments within `upf_zbmi_clustering_pipeline.R`.
 
@@ -125,7 +125,7 @@ clean_data$WHO_zBMI_12m[is.na(clean_data$WHO_zBMI_12m)] <- med_val
 
 ---
 
-## 📈 Growth Analysis & Clustering (Sections 8–11)
+## Growth Analysis & Clustering (Sections 8–11)
 
 ### Data Preparation for Clustering (Section 8)
 
@@ -321,9 +321,9 @@ source("upf_zbmi_clustering_pipeline.R")
 
 Or run section by section using the **Table of Contents** at the top of the script (lines 16–31).
 
-> ⚠️ Update `setwd()` in Section 2 to point to your local data directory, or place `mock_precision_growth_dataset.csv` in your working directory before running.
+> Update `setwd()` in Section 2 to point to your local data directory, or place `mock_precision_growth_dataset.csv` in your working directory before running.
 
-> ✅ `set.seed()` is used for all random processes — results are fully reproducible.
+>  `set.seed()` is used for all random processes — results are fully reproducible.
 
 ---
 
@@ -350,5 +350,3 @@ Or run section by section using the **Table of Contents** at the top of the scri
 ## Data Source & License
 
 Dataset: [Comelli Lab Open Code Library](https://github.com/Comelli-lab/Open_code_library/blob/master/Clustering_growth_trajectories/Data/mock_precision_growth_dataset.csv)
-
-This project is for academic purposes only (University course assignment, April 2026).
