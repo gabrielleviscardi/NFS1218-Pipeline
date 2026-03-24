@@ -76,7 +76,7 @@ Key observations:
 - The maximum zBMI of 7.28 corresponds to the known outlier (ID 294) which exceeds the WHO +5 SD implausibility threshold and is removed during cleaning
  
 #### Additional Key Variables (from dataset documentation)
- 
+
 | Variable | Distribution | Notes |
 |----------|-------------|-------|
 | `Sex` | ~50% Male / 50% Female | Balanced |
