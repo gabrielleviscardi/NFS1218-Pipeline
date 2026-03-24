@@ -355,6 +355,8 @@ multinom_model <- nnet::multinom(
 Covariates were selected based on biological plausibility: maternal BMI and gestational age are known predictors of early growth; sex is adjusted for because boys and girls follow different weight trajectories; household income captures socioeconomic barriers that affect both diet and growth. Full model output (odds ratios, 95% CIs, p-values) is saved in `outputs/cluster_profiles_summary.csv`.
 
 ---
+**Implications and Conclusions**
+
 
 ## How to Reproduce This Analysis
 
@@ -416,15 +418,6 @@ source("upf_zbmi_clustering_pipeline.R")
 - **Observational design:** Unmeasured confounders (breastfeeding, physical activity, sleep) cannot be ruled out.
 - **Generalizability:** Findings may not extend beyond this cohort's specific demographics.
 - **Association, not causation:** No causal inference can be drawn.
-
----
-
-## Deliverables Checklist
-
-- [x] **CRISP-DM Structured Report** — all 6 stages documented in group project report
-- [x] **Growth Analysis Component** — zBMI distributions, distance matrix, optimal k (NbClust/Elbow/Silhouette), K-means/PAM/Hierarchical clustering, internal + stability validation
-- [x] **Reproducibility & GitHub** — organized repository, fully annotated R script with table of contents, this README with dataset description and all cleaning decisions documented
-- [x] **Precision Nutrition Interpretation** — biological heterogeneity confirmed (two distinct trajectory groups), personalized intervention implications discussed, model limitations documented
 
 ---
 
