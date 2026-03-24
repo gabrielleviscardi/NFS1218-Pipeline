@@ -50,10 +50,10 @@ Mock longitudinal cohort, **n = 300** mother–child pairs.
 | Variable | Type | Description |
 |----------|------|-------------|
 | `Ultra_processed_score` | Continuous (0–1) | Primary exposure; proportion of energy from UPFs |
-| `zBMI_24m` | Continuous | Primary outcome; WHO-standardized BMI z-score at 24m |
-| `WHO_zBMI_birth` | Continuous | WHO-standardized BMI z-score at birth |
-| `WHO_zBMI_12m` | Continuous | WHO-standardized BMI z-score at 12 months (10% missing) |
-| `Sex` | Categorical | Male/Female (~50/50) |
+| `zBMI_24m` | Continuous | Primary outcome; WHO-standardized BMI z-score at 24 months |
+| `zBMI_6m` | Continuous | Derived; WHO-standardized BMI z-score at 6 months |
+| `zBMI_12m` | Continuous | Derived; WHO-standardized BMI z-score at 12 months (10% missing) |
+| `Sex` | Categorical | Male / Female (~50/50) |
 | `Gestational_age_weeks` | Continuous | Range: 34.1–44.8 weeks |
 | `Maternal_BMI` | Continuous | Pre-pregnancy BMI |
 | `Household_income_index` | Continuous | Socioeconomic covariate |
@@ -78,8 +78,8 @@ Key observations:
 |----------|-------------|-------|
 | `Sex` | ~50% Male / 50% Female | Balanced |
 | `Gestational_age_weeks` | Range: 34.1–44.8 weeks | Includes preterm births |
-| `WHO_zBMI_birth` | Centred near 0 | 11 values below −5 SD (implausible) |
-| `WHO_zBMI_12m` | Centred near 0 | 10% missing (n=30); 1 value below −5 SD |
+| `zBMI_6m` | Centred near 0 | To be derived from `Weight_6m_kg` and `Length_6m_cm` using WHO standards |
+| `zBMI_12m` | Centred near 0 | To be derived; 10% missing (n=30) in `Weight_12m_kg` prior to imputation |
  
 **Intentional data quality issues (part of the assignment):**
 - Implausible `Age_24m_months` values (n=6): IDs with ages of −3, 5, or 120 months
@@ -113,7 +113,7 @@ gg_miss_upset(data)
 |-------|----------|-----------|
 | `Age_24m_months` implausible values (n=6) | Excluded from 24m analysis | Ages of −3, 5, or 120 months are biologically impossible for a 24-month visit |
 | zBMI < −5 or > +5 SD at any timepoint | Excluded (WHO cut-offs) | Values beyond ±5 SD are flagged as biologically implausible by WHO |
-| `WHO_zBMI_12m` missing (n=30, 10%) | Median imputation | Dropping these rows would lose a key clustering variable; median is robust to outliers |
+| `zBMI_12m` missing (n=30, 10%) | Median imputation | Dropping these rows would lose a key clustering variable; median is robust to outliers |
 | Other missing covariates | Retained | Not core to the primary clustering analysis |
 
 ```r
