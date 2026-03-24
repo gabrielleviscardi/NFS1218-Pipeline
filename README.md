@@ -2,30 +2,13 @@
 
 > A fully reproducible A-Z data analysis pipeline following the CRISP-DM framework, examining whether maternal ultra-processed food (UPF) consumption predicts distinct infant growth trajectory clusters from birth to 24 months.
 
----
-
-## Project Overview
-
-**Research Question:**
-> Do children of mothers with higher UPF consumption scores belong to higher-risk zBMI growth clusters, and does maternal dietary quality predict cluster membership at 24 months?
-
-- **Exposure:** Maternal UPF score at time of birth (continuous, range 0–1; higher = greater proportion of energy from ultra-processed foods)
-- **Outcome:** Offspring zBMI trajectory clusters (birth, 12m, 24m) and zBMI at 24 months
-- **Method:** Growth trajectory clustering (K-means, PAM, Hierarchical) + multinomial logistic regression
-
-This project follows all stages of the **CRISP-DM framework** and applies WHO-standardized growth analysis methods with transparent, version-controlled workflows on GitHub.
-
----
-
-## Team Members
+---## Team Members
 
 | Name | GitHub Username |
 |------|----------------|
 | Gabrielle Viscardi | [@gabrielleviscardi] |
 | Brighid McKay | [@brighidmck] |
 | Diana Ghidanac | [@deedee1912] |
-
----
 
 ## Repository Structure
 
@@ -38,6 +21,26 @@ This project follows all stages of the **CRISP-DM framework** and applies WHO-st
 │   └── clean_precision_growth_dataset.csv  # Cleaned dataset (output of Section 6)
 └── outputs/
     └── figures/                            # All generated plots (19 figures)```
+---
+
+## Project Overview
+
+**Background**
+
+Ultra-processed foods (UPFs) are industrially formulated products high in sugar, saturated fat, and sodium, and low in fibre. Maternal UPF consumption during pregnancy may influence fetal programming and early childhood growth. This pipeline uses clustering methods to identify distinct growth trajectory groups in children from birth to 24 months, then tests whether a mother's UPF score predicts which group her child falls into.
+
+**Research Question:**
+> Do children of mothers with higher UPF consumption scores belong to higher-risk zBMI growth clusters, and does maternal dietary quality predict cluster membership at 24 months?
+
+- **Exposure:** Maternal UPF score at time of birth (continuous, range 0–1; higher = greater proportion of energy from ultra-processed foods)
+- **Outcome:** Offspring zBMI trajectory clusters (birth, 12m, 24m) and zBMI at 24 months
+- **Covariates to Consider:** Offspring sex, gestational age at birth, maternal socioeconomic/social determinants of health variables
+- **Method:** Growth trajectory clustering (K-means, PAM, Hierarchical) + multinomial logistic regression
+
+**Target Population**
+-	Pregnant women and their children, regardless of health status
+-	Population-representative of diverse socioeconomic and dietary backgrounds
+-	Infants followed longitudinally from birth through 24 months
 
 ---
 
@@ -134,9 +137,9 @@ clean_data$WHO_zBMI_12m[is.na(clean_data$WHO_zBMI_12m)] <- med_val
 
 ### Why These Variables? — Data Preparation for Clustering (Section 8)
 
-We cluster children based on their **zBMI at three timepoints: birth, 12 months, and 24 months**. These three variables together describe each child's *growth trajectory* — not just their size at one point in time, but how their body composition changed from birth to age 2. This is more biologically informative than a single snapshot.
+We cluster children based on their **zBMI at three timepoints: birth, 12 months, and 24 months**. These three variables together describe each child's *growth trajectory*, not just their size at one point in time, but how their body composition changed from birth to age 2. This is more biologically informative than a single snapshot.
 
-All three variables are **standardized (scaled)** before clustering so that each timepoint contributes equally to the distance calculation — without this step, one variable with a larger numeric range could dominate the results.
+All three variables are **standardized (scaled)** before clustering so that each timepoint contributes equally to the distance calculation. Without this step, one variable with a larger numeric range could dominate the results.
 
 ```r
 growth_vars   <- c("WHO_zBMI_birth", "WHO_zBMI_12m", "zBMI_24m")
@@ -150,7 +153,7 @@ dist_eucl     <- dist(growth_scaled, method = "euclidean")
 
 We used three independent methods to determine the optimal number of clusters (k). All three agreed on **k = 2**.
 
-#### NbClust — 26 Statistical Indices Voting
+#### NbClust : 26 Statistical Indices Voting
 
 NbClust runs 26 different internal validity indices and each one "votes" for its preferred k. Think of it as a committee of 26 statistical experts voting independently. The k with the most votes is selected as optimal.
 
@@ -161,7 +164,7 @@ nbclust_result <- NbClust(data = growth_scaled, distance = "euclidean",
 
 ![NbClust D-Index](outputs/figures/fig07_nbclust_dindex.jpg)
 
-*Figure 7. NbClust D-index diagnostic plots (auto-generated). Left panel: the D-index decreases as k increases from 2 to 6 — a steeper early drop signals that the biggest improvement in cluster quality occurs at k=2. Right panel: the second differences peak at k=3, indicating the most meaningful jump in quality happens between k=2 and k=3, confirming k=2 as optimal.*
+*Figure 7. NbClust D-index diagnostic plots (auto-generated). Left panel: the D-index decreases as k increases from 2 to 6. This steeper early drop signals that the biggest improvement in cluster quality occurs at k=2. Right panel: the second differences peak at k=3, indicating the most meaningful jump in quality happens between k=2 and k=3, confirming k=2 as optimal.*
 
 ![NbClust Voting Results](outputs/figures/fig08_nbclust_votes.jpg)
 
@@ -169,7 +172,7 @@ nbclust_result <- NbClust(data = growth_scaled, distance = "euclidean",
 
 #### Elbow Method
 
-Plots total within-cluster sum of squares (WSS) for k=1 to k=6. We look for the "elbow" — the point where adding more clusters stops producing meaningful improvements.
+Plots total within-cluster sum of squares (WSS) for k=1 to k=6. We look for the "elbow", which is the point where adding more clusters stops producing meaningful improvements.
 
 ```r
 wss <- sapply(1:6, function(k) kmeans(growth_scaled, centers = k, nstart = 25)$tot.withinss)
@@ -177,7 +180,7 @@ wss <- sapply(1:6, function(k) kmeans(growth_scaled, centers = k, nstart = 25)$t
 
 ![Elbow Method](outputs/figures/fig09_elbow_method.jpg)
 
-*Figure 9. Elbow method. The largest drop in WSS occurs at k=2 (red point), after which gains become much smaller. This confirms k=2.*
+*Figure 9. Elbow method. The largest drop in WSS occurs at k=2 (red point), after which gains become much smaller. **This confirms k=2.***
 
 #### Silhouette Method
 
@@ -189,7 +192,7 @@ fviz_nbclust(growth_scaled, kmeans, method = "silhouette")
 
 ![Silhouette Method — K-Means](outputs/figures/fig10_silhouette_kmeans.jpg)
 
-*Figure 10. Silhouette method for K-means. Peak at **k=2 (~0.39)**, indicating a weak-to-moderate but present cluster structure. A score of ~0.39 is expected with biological growth data, which is continuous rather than sharply categorical — some overlap between clusters is biologically realistic.*
+*Figure 10. Silhouette method for K-means. Peak at **k=2 (~0.39)**, indicating a weak-to-moderate but present cluster structure. A score of ~0.39 is expected with biological growth data, which is continuous rather than sharply categorical.*
 
 ---
 
@@ -204,16 +207,16 @@ set.seed(42)
 km_result <- kmeans(growth_scaled, centers = 2, nstart = 25)
 ```
 
-**Cluster profiles — mean zBMI at each timepoint:**
+**Cluster profiles:  mean zBMI at each timepoint:**
 
 | Cluster | zBMI at Birth | zBMI at 12m | zBMI at 24m | Interpretation |
 |---------|--------------|-------------|-------------|----------------|
-| **1** | +1.05 | +1.87 | **+0.87** | Higher zBMI trajectory — "heavier growth" group |
-| **2** | −1.42 | −0.62 | **−0.72** | Lower zBMI trajectory — "leaner growth" group |
+| **1** | +1.05 | +1.87 | **+0.87** | Higher zBMI trajectory - "heavier growth" group |
+| **2** | −1.42 | −0.62 | **−0.72** | Lower zBMI trajectory - "leaner growth" group |
 
 ![K-Means PCA Plot](outputs/figures/fig11_kmeans_pca.jpg)
 
-*Figure 11. K-means clusters projected onto PCA space. Each point = one child; each colour = one cluster. Cluster 1 (higher zBMI) sits to the right along PC1; Cluster 2 (lower zBMI) sits to the left. PC1 captures the majority of variance in growth trajectories. The overlap in the centre is consistent with a silhouette score of ~0.39 and reflects genuine biological continuity in growth.*
+*Figure 11. K-means clusters projected onto PCA space. Each point = one child; each colour = one cluster. Cluster 1 (higher zBMI) sits to the right along PC1; Cluster 2 (lower zBMI) sits to the left. PC1 captures the majority of variance in growth trajectories. The overlap in the centre is consistent with a silhouette score of ~0.39 and reflects biological continuity in growth.*
 
 ---
 
@@ -242,7 +245,7 @@ pam_result <- pam(growth_scaled, k = 2)
 
 #### Hierarchical Clustering
 
-Hierarchical clustering builds a tree (dendrogram) by repeatedly merging the two most similar children or groups. It does not require specifying k in advance — we build the full tree and then cut it into 2 groups.
+Hierarchical clustering builds a tree (dendrogram) by repeatedly merging the two most similar children or groups. It does not require specifying k in advance. We build the full tree and then cut it into 2 groups.
 
 ```r
 res_hc    <- hclust(d = dist(growth_scaled, method = "euclidean"), method = "complete")
@@ -251,7 +254,7 @@ hc_groups <- cutree(res_hc, k = 2)
 
 ![Dendrogram — Plain](outputs/figures/fig14_dendrogram_plain.jpg)
 
-*Figure 14. Hierarchical clustering dendrogram (uncoloured). The y-axis (Height) shows the distance at which two groups were merged — taller branches mean groups were very different before being combined. The large top branch clearly splits the data into two main groups, consistent with k=2. Individual labels on the x-axis are unreadable at this scale due to n=293 children — this is expected.*
+*Figure 14. Hierarchical clustering dendrogram (uncoloured). The y-axis (Height) shows the distance at which two groups were merged: taller branches mean groups were very different before being combined. The large top branch clearly splits the data into two main groups, consistent with k=2. Individual labels on the x-axis are unreadable at this scale due to n=293 children.*
 
 ![Dendrogram — Coloured](outputs/figures/fig15_dendrogram_coloured.jpg)
 
@@ -317,11 +320,11 @@ To confirm the clusters are biologically distinct, we plot zBMI at 24 months by 
 
 ![zBMI by Cluster](outputs/figures/fig17_zbmi_by_cluster.jpg)
 
-*Figure 17. zBMI at 24 months by growth cluster. Cluster 1 (green) has a median zBMI of ~+0.87 — above the WHO median (z=0) but well below the overweight threshold (z=+2, orange line). Cluster 2 (orange) has a median zBMI of ~−0.72, below the population median but above the underweight threshold (z=−2, blue line). The two clusters are clearly distinct in terms of the outcome, even though UPF score does not differ between them.*
+*Figure 17. zBMI at 24 months by growth cluster. Cluster 1 (green) has a median zBMI of ~+0.87 which is above the WHO median (z=0) but well below the overweight threshold (z=+2, orange line). Cluster 2 (orange) has a median zBMI of ~−0.72, below the population median but above the underweight threshold (z=−2, blue line). The two clusters are clearly distinct in terms of the outcome, even though UPF score does not differ between them.*
 
 ### Weight Trajectory by Cluster
 
-This is the key "trajectory" visualization — it shows how mean weight changes from birth to 24 months in each cluster, confirming that the groups differ not just at 24 months but consistently across the full follow-up period.
+This is the key "trajectory" visualization as it shows how mean weight changes from birth to 24 months in each cluster, confirming that the groups differ not just at 24 months but consistently across the full follow-up period.
 
 ![Weight Trajectory](outputs/figures/fig18_weight_trajectory.jpg)
 
@@ -333,7 +336,7 @@ A summary visualization showing how all key variables compare across clusters si
 
 ![Cluster Profile Heatmap](outputs/figures/fig19_cluster_heatmap.jpg)
 
-*Figure 19. Cluster profile heatmap. Red = higher value; Blue = lower value (scaled within each variable). Cluster 1 has higher zBMI, higher weight, and much higher stunting (18.8% vs 1.4%) compared to Cluster 2. Critically, **Mean UPF Score is identical across both clusters (0.47)**, shown by the symmetric red/blue pattern in the bottom row — this visually confirms that maternal UPF consumption does not separate the two growth groups.*
+*Figure 19. Cluster profile heatmap. Red = higher value; Blue = lower value (scaled within each variable). Cluster 1 has higher zBMI, higher weight, and much higher stunting (18.8% vs 1.4%) compared to Cluster 2. Critically, **Mean UPF Score is identical across both clusters (0.47)**, shown by the symmetric red/blue pattern in the bottom row. This visually confirms that maternal UPF consumption does not separate the two growth groups.*
 
 ### Multinomial Logistic Regression
 
@@ -382,7 +385,7 @@ cd NFS1218-Pipeline
 source("upf_zbmi_clustering_pipeline.R")
 ```
 
-> `set.seed(42)` is used for all random processes — results are fully reproducible across machines.
+> `set.seed(42)` is used for all random processes. Results are fully reproducible across machines.
 
 ### Script Table of Contents
 
