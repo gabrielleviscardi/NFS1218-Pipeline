@@ -48,7 +48,7 @@ Ultra-processed foods (UPFs) are industrially formulated products high in sugar,
 
 **Source:** [Comelli Lab Open Code Library](https://github.com/Comelli-lab/Open_code_library/blob/master/Clustering_growth_trajectories/Data/mock_precision_growth_dataset.csv)
 
-Mock longitudinal cohort, **n = 300** mother–child pairs.
+Mock longitudinal cohort, **n = 300** mother-child pairs.
 
 | Variable | Type | Description |
 |----------|------|-------------|
@@ -62,9 +62,9 @@ Mock longitudinal cohort, **n = 300** mother–child pairs.
 | `Household_income_index` | Continuous | Socioeconomic covariate |
 
 ### Descriptive Statistics (before cleaning, n = 300)
- 
+
 #### Primary Exposure and Outcome
- 
+
 | Variable | n | Mean | SD | Min | Max | 95% CI |
 |----------|---|------|----|-----|-----|--------|
 | `Ultra_processed_score` | 300 | 0.478 | 0.273 | 0.00 | 1.00 | [0.449, 0.509] |
