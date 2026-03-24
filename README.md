@@ -85,7 +85,7 @@ Key observations:
 | `zBMI_6m` | Centred near 0 | To be derived from `Weight_6m_kg` and `Length_6m_cm` using WHO standards |
 | `zBMI_12m` | Centred near 0 | To be derived; 10% missing (n=30) in `Weight_12m_kg` prior to imputation |
  
-**Intentional data quality issues (part of the assignment):**
+**Intentional data quality issues:**
 - Implausible `Age_24m_months` values (n=6): IDs with ages of −3, 5, or 120 months
 - WHO zBMI outlier (n=1): one child with `zBMI_24m` = 7.28, exceeding the +5 SD threshold
 - Missing data (~10% each): `WHO_zBMI_12m`, `Fiber_intake_g`, `ALT`, `Shannon_diversity`
