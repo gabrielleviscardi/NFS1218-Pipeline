@@ -9,6 +9,8 @@
 | Gabrielle Viscardi | [@gabrielleviscardi] |
 | Brighid McKay | [@brighidmck] |
 | Diana Ghidanac | [@deedee1912] |
+All members contributed to this project equally. 
+
 
 ## Repository Structure
 
