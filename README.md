@@ -20,7 +20,8 @@
 │   ├── mock_precision_growth_dataset.csv   # Raw dataset (unmodified)
 │   └── clean_precision_growth_dataset.csv  # Cleaned dataset (output of Section 6)
 └── outputs/
-    └── figures/                            # All generated plots (19 figures)```
+    └── figures/                            # All generated plots (19 figures)
+```
 ---
 
 ## Project Overview
