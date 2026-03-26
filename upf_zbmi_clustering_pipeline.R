@@ -5,7 +5,7 @@
 #   Is maternal UPF score associated with distinct zBMI trajectory clusters
 #   from birth to 24 months?
 #   Do children of mothers with higher UPF scores belong to higher-risk zBMI
-#   growth clusters, and does maternal dietary quality predict cluster
+#   growth clusters, and does maternal UPF consumption predict cluster
 #   membership at 24 months?
 #
 # BACKGROUND:
@@ -246,7 +246,7 @@ if ("Age_24m_months" %in% names(data)) {
 
 # --- Implausible zBMI at birth (WHO cut-off: < -5 or > +5) ---
 if ("WHO_zBMI_birth" %in% names(data)) {
-  implausible_zBMI <- data %>%
+  implausible_zBMI_birth <- data %>%
     filter(WHO_zBMI_birth < -5 | WHO_zBMI_birth > 5)
   cat("\nImplausible zBMI at birth (outside WHO ±5 SD):\n")
   print(implausible_zBMI)
@@ -254,7 +254,7 @@ if ("WHO_zBMI_birth" %in% names(data)) {
 
 # --- Implausible zBMI at 12 months (WHO cut-off: < -5 or > +5) ---
 if ("WHO_zBMI_12m" %in% names(data)) {
-  implausible_zBMI <- data %>%
+  implausible_zBMI_12m <- data %>%
     filter(WHO_zBMI_12m < -5 | WHO_zBMI_12m > 5)
   cat("\nImplausible zBMI at 12 months (outside WHO ±5 SD):\n")
   print(implausible_zBMI)
@@ -262,7 +262,7 @@ if ("WHO_zBMI_12m" %in% names(data)) {
 
 # --- Implausible zBMI at 24 months (WHO cut-off: < -5 or > +5) ---
 if ("zBMI_24m" %in% names(data)) {
-  implausible_zBMI <- data %>%
+  implausible_zBMI_24m <- data %>%
     filter(zBMI_24m < -5 | zBMI_24m > 5)
   cat("\nImplausible zBMI at 24 months (outside WHO ±5 SD):\n")
   print(implausible_zBMI)
@@ -291,71 +291,49 @@ if ("zBMI_24m" %in% names(data)) {
 #   4. WHO_zBMI_12m missing values (n=30, 10%):
 #      Rather than dropping these rows — which would reduce our sample by 10%
 #      and potentially introduce bias if missingness is not random — we impute
-#      with the MEDIAN zBMI at 12 months. The median is used rather than the
-#      mean because it is more robust to the skew/outliers we observed in the
-#      distribution plots. Note: multiple imputation via the mice package would
-#      be preferred in a final analysis, but median imputation is used here as
-#      a reproducible and transparent approximation.
+#      with the MEAN zBMI at 12 months. The mean is appropriate here because
+#      the distribution of WHO_zBMI_12m is approximately normal after outlier
+#      removal, as confirmed by visual inspection of the histogram and Q-Q plot.
+#      Note: multiple imputation via the mice package would be preferred in a
+#      final analysis, but mean imputation is used here as a reproducible and
+#      transparent approximation.
 # =============================================================================
 
 clean_data <- data
 
-# --- Step 1: Remove rows missing essential variables ---
+# --- Step 1: Remove biologically implausible zBMI values (WHO ±5 SD cut-off) ---
+# We use is.na() | to preserve missing rows so they can be imputed in Step 2
+# rather than being accidentally dropped here
+clean_data <- clean_data %>%
+  filter(is.na(WHO_zBMI_birth) | (WHO_zBMI_birth >= -5 & WHO_zBMI_birth <= 5)) %>%
+  filter(is.na(WHO_zBMI_12m)   | (WHO_zBMI_12m   >= -5 & WHO_zBMI_12m   <= 5)) %>%
+  filter(is.na(zBMI_24m)       | (zBMI_24m       >= -5 & zBMI_24m       <= 5))
+
+cat(sprintf("Rows after removing implausible zBMI outliers: %d\n", nrow(clean_data)))
+
+# --- Step 2: Remove implausible age values ---
+clean_data <- clean_data %>%
+  filter(Age_24m_months >= 0 & Age_24m_months <= 60)
+
+cat(sprintf("Rows after removing implausible age values: %d\n", nrow(clean_data)))
+
+# --- Step 3: Impute missing WHO_zBMI_12m with mean ---
+# Mean is appropriate here because the distribution is approximately normal
+# after outlier removal, as confirmed by histogram and Q-Q plot inspection.
+imp_val <- mean(clean_data$WHO_zBMI_12m, na.rm = TRUE)
+n_miss  <- sum(is.na(clean_data$WHO_zBMI_12m))
+clean_data$WHO_zBMI_12m[is.na(clean_data$WHO_zBMI_12m)] <- imp_val
+cat(sprintf("Imputed %d missing values in 'WHO_zBMI_12m' with mean (%.3f)\n",
+            n_miss, imp_val))
+
+# --- Step 4: Remove rows missing essential variables ---
 # We cannot cluster or run regression without these three columns.
 clean_data <- clean_data %>%
   filter(!is.na(zBMI_24m),
          !is.na(WHO_zBMI_birth),
          !is.na(Ultra_processed_score))
 
-cat(sprintf("Rows after removing missing essential variables: %d\n", nrow(clean_data)))
-
-# --- Step 2: Identify and flag implausible age at 24-month visit ---
-# These are not removed here (the filter above handles the primary cleaning),
-# but printed for documentation purposes.
-if ("Age_24m_months" %in% names(clean_data)) {
-  implausible_age <- clean_data %>%
-    filter(Age_24m_months < 0 | Age_24m_months > 60)
-  cat(sprintf("\nChildren with implausible 24-month visit age (n=%d):\n", nrow(implausible_age)))
-  print(implausible_age)
-}
-
-# --- Step 3: Identify and flag WHO zBMI outliers ---
-if ("WHO_zBMI_birth" %in% names(clean_data)) {
-  implausible_zbmi_birth <- clean_data %>%
-    filter(WHO_zBMI_birth < -5 | WHO_zBMI_birth > 5)
-  cat(sprintf("\nChildren with implausible zBMI at birth (n=%d):\n", nrow(implausible_zbmi_birth)))
-  print(implausible_zbmi_birth)
-}
-
-if ("WHO_zBMI_12m" %in% names(clean_data)) {
-  implausible_zbmi_12m <- clean_data %>%
-    filter(WHO_zBMI_12m < -5 | WHO_zBMI_12m > 5)
-  cat(sprintf("\nChildren with implausible zBMI at 12 months (n=%d):\n", nrow(implausible_zbmi_12m)))
-  print(implausible_zbmi_12m)
-}
-
-if ("zBMI_24m" %in% names(clean_data)) {
-  implausible_zbmi_24m <- clean_data %>%
-    filter(zBMI_24m < -5 | zBMI_24m > 5)
-  cat(sprintf("\nChildren with implausible zBMI at 24 months (n=%d):\n", nrow(implausible_zbmi_24m)))
-  print(implausible_zbmi_24m)
-}
-
-# --- Step 4: Impute missing WHO_zBMI_12m with median ---
-# We use a loop here so the same logic could easily be applied to other
-# variables in future without rewriting code.
-cols_to_impute <- c("WHO_zBMI_12m")
-for (col in cols_to_impute) {
-  if (col %in% names(clean_data)) {
-    med_val <- median(clean_data[[col]], na.rm = TRUE)
-    n_miss  <- sum(is.na(clean_data[[col]]))
-    clean_data[[col]][is.na(clean_data[[col]])] <- med_val
-    if (n_miss > 0) cat(sprintf(
-      "Imputed %d missing values in '%s' with median (%.3f)\n",
-      n_miss, col, med_val))
-  }
-}
-
+cat(sprintf("Final sample size after cleaning: %d children\n", nrow(clean_data)))
 # =============================================================================
 # SECTION 7 — POST-CLEANING DIAGNOSTICS
 #
@@ -625,7 +603,7 @@ fviz_nbclust(growth_scaled, kmeans, method = "silhouette") +
 #     Builds a tree (dendrogram) by repeatedly merging the two most similar
 #     observations or groups. Does not require specifying k in advance —
 #     you cut the tree at the desired number of clusters.
-#     We use Ward's linkage (method = "complete"), which minimises the total
+#     We use the complete linkage method (method = "complete"), which minimises the total
 #     within-cluster variance at each step.
 # =============================================================================
 
@@ -910,15 +888,16 @@ cluster_profile <- clean_data %>%
     mean_zBMI_24m      = round(mean(zBMI_24m), 3),
     sd_zBMI_24m        = round(sd(zBMI_24m), 3),
     mean_birth_weight  = round(mean(Birth_weight_g), 1),
-    mean_weight_6m     = round(mean(Weight_6m_kg), 2),
-    mean_weight_12m    = round(mean(Weight_12m_kg), 2),
-    mean_weight_24m    = round(mean(Weight_24m_kg), 2),
+    mean_weight_6m     = round(mean(Weight_6m_kg, na.rm = TRUE), 2),
+    mean_weight_12m    = round(mean(Weight_12m_kg, na.rm = TRUE), 2),
+    mean_weight_24m    = round(mean(Weight_24m_kg, na.rm = TRUE), 2),
     mean_UPF_score     = round(mean(Ultra_processed_score), 3),
     pct_stunted        = round(mean(Stunted_24m) * 100, 1)
   )
-
 cat("\nCluster profiles (mean values per cluster):\n")
 print(cluster_profile)
+
+print(cluster_profile, width = Inf) ## values were truncating so this was helping us to see all of the results
 
 # --- Step 2: ANOVA — does UPF score differ between clusters? ---
 # One-way ANOVA tests: is maternal UPF score the same across both clusters?
@@ -950,7 +929,7 @@ plot_upf_cluster <- ggplot(clean_data,
   scale_fill_brewer(palette = "Set2", name = "Cluster") +
   labs(
     title    = "Maternal UPF Score by zBMI Growth Cluster",
-    subtitle = "Does maternal diet quality predict which growth cluster a child belongs to?",
+    subtitle = "Does maternal UPF consumption predict which growth cluster a child belongs to?",
     x        = "Growth Cluster",
     y        = "Maternal Ultra-Processed Food Score (0-1)"
   ) +
@@ -961,10 +940,13 @@ print(plot_upf_cluster)
 ggsave("plot_upf_by_cluster.png", plot_upf_cluster, width = 8, height = 5, dpi = 300)
 
 # Result: Maternal UPF score does not appear to differ meaningfully between
-# the two growth clusters — both groups show similar median scores and heavily
-# overlapping distributions. This suggests that in this dataset, maternal UPF
-# consumption alone may not be sufficient to predict child growth trajectory
-# group membership.
+# the two zBMI growth clusters (F=0.362, p=0.548) — both groups show similar 
+# median scores (0.45-0.50) and heavily overlapping distributions. This suggests 
+# that in this dataset, maternal UPF consumption alone may not be sufficient to 
+# predict child zBMI growth cluster membership. Possible explanations include 
+# the effect of unmeasured confounders such as total energy intake, feeding practices, or 
+# other socioeconomic factors that are more likely to influence early growth 
+# trajectories.
 
 # --- Step 3b: Boxplot — zBMI at 24 months by cluster ---
 # This confirms the clusters are genuinely different in terms of the outcome.
