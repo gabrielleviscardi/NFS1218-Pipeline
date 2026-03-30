@@ -414,8 +414,8 @@ source("upf_zbmi_clustering_pipeline.R")
 
 ## Limitations
 
-- **No significant association found:** Maternal UPF score did not significantly predict cluster membership (ANOVA p > 0.05; regression OR not significant). This may reflect the small sample size (n~293 after cleaning), the use of a single dietary score, or genuine absence of effect in this cohort.
-- **Median imputation:** Used for `WHO_zBMI_12m`; multiple imputation via `mice` would be more rigorous.
+- **No significant association found:** Maternal UPF score did not significantly predict cluster membership (ANOVA p > 0.05; regression OR not significant). This may reflect the small sample size (n~282 after cleaning), the use of a single dietary score, or genuine absence of effect in this cohort.
+- **Mean imputation:** Used for `WHO_zBMI_12m`; multiple imputation via `mice` would be more rigorous.
 - **Weak cluster separation** (silhouette ~0.39): Clusters represent empirical groupings on a biological continuum, not discrete phenotypes.
 - **Observational design:** Unmeasured confounders (breastfeeding, physical activity, sleep) cannot be ruled out.
 - **Generalizability:** Findings may not extend beyond this cohort's specific demographics.
