@@ -119,8 +119,10 @@ gg_miss_upset(data)
 |-------|----------|-----------|
 | `Age_24m_months` implausible values (n=6) | Excluded from 24m analysis | Ages of −3, 5, or 120 months are biologically impossible for a 24-month visit |
 | zBMI < −5 or > +5 SD at any timepoint | Excluded (WHO cut-offs) | Values beyond ±5 SD are flagged as biologically implausible by WHO |
-| `zBMI_12m` missing (n=30, 10%) | Median imputation | Dropping these rows would lose a key clustering variable; median is robust to outliers |
+| `zBMI_12m` missing (n=30, 10%) | Mean imputation | Dropping these rows would lose a key clustering variable; The mean is used because the distribution of WHO_zBMI_12m is approximately normal after outlier removal, as confirmed by histogram and Q-Q plot inspection. |
 | Other missing covariates | Retained | Not core to the primary clustering analysis |
+
+![Q-Q plot](outputs/figures/q-q plot of zbmi 12mo.png)
 
 ```r
 # Remove rows missing essential variables
@@ -165,13 +167,13 @@ nbclust_result <- NbClust(data = growth_scaled, distance = "euclidean",
                            min.nc = 2, max.nc = 6, method = "kmeans", index = "all")
 ```
 
-![NbClust D-Index](outputs/figures/fig07_nbclust_dindex.jpg)
+![NbClust D-Index](outputs/figures/nb clust dindex.png)
 
-*Figure 7. NbClust D-index diagnostic plots (auto-generated). Left panel: the D-index decreases as k increases from 2 to 6. This steeper early drop signals that the biggest improvement in cluster quality occurs at k=2. Right panel: the second differences peak at k=3, indicating the most meaningful jump in quality happens between k=2 and k=3, confirming k=2 as optimal.*
+*Figure 7. NbClust D-index diagnostic plots (auto-generated). Left panel: the D-index decreases steadily as k increases from 2 to 6, with the lowest value at k=6. Right panel: the second differences peak at k=3, indicating the most meaningful change in cluster quality improvement occurs between k=2 and k=3, confirming k=2 as the optimal solution*
 
-![NbClust Voting Results](outputs/figures/fig08_nbclust_votes.jpg)
+![NbClust Voting Results](outputs/figures/nbClust.png)
 
-*Figure 8. NbClust voting results. **k=2 received 11 votes** from 26 internal indices, followed by k=3 with 9 votes. The majority of independent statistical criteria agree that two clusters best describe the structure in these growth trajectory data.*
+*Figure 8. NbClust voting results. **k=2 received 11 votes** from 26 internal indices, followed by k=3 with 6 votes. The majority of independent statistical criteria agree that two clusters best describe the structure in these growth trajectory data.*
 
 #### Elbow Method
 
@@ -214,12 +216,12 @@ km_result <- kmeans(growth_scaled, centers = 2, nstart = 25)
 
 | Cluster | zBMI at Birth | zBMI at 12m | zBMI at 24m | Interpretation |
 |---------|--------------|-------------|-------------|----------------|
-| **1** | +1.05 | +1.87 | **+0.87** | Higher zBMI trajectory - "heavier growth" group |
-| **2** | −1.42 | −0.62 | **−0.72** | Lower zBMI trajectory - "leaner growth" group |
+| **1** | -1.07 | -0.44 | **-0.626** | Lower zBMI trajectory - "leaner growth" group |
+| **2** | +1.06 | +1.93 | **+0.906** | Higher zBMI trajectory - "heavier growth" group |
 
-![K-Means PCA Plot](outputs/figures/fig11_kmeans_pca.jpg)
+![K-Means PCA Plot](outputs/figures/kmeans clusters child zBMI trajectories.png)
 
-*Figure 11. K-means clusters projected onto PCA space. Each point = one child; each colour = one cluster. Cluster 1 (higher zBMI) sits to the right along PC1; Cluster 2 (lower zBMI) sits to the left. PC1 captures the majority of variance in growth trajectories. The overlap in the centre is consistent with a silhouette score of ~0.39 and reflects biological continuity in growth.*
+*Figure 11. K-means clusters projected onto PCA space. Each point = one child; each colour = one cluster. Cluster 1 (lower zBMI, green circles) sits to the right along PC1; Cluster 2 (higher zBMI, orange triangles) sits to the left. PC1 captures the majority of variance in growth trajectories. The overlap in the centre is consistent with a silhouette score of ~0.39 and reflects biological continuity in growth.*
 
 ---
 
@@ -240,7 +242,7 @@ set.seed(42)
 pam_result <- pam(growth_scaled, k = 2)
 ```
 
-![PAM Clusters](outputs/figures/fig13_pam_clusters.jpg)
+![PAM Clusters](outputs/figures/PAM clusters.png)
 
 *Figure 13. PAM cluster plot (Dim1 = 75.5% of variance). Cluster 1 (red/left) = lower zBMI group; Cluster 2 (blue/right) = higher zBMI group. Results are nearly identical to K-means, confirming the two-cluster structure is robust across methods.*
 
@@ -302,8 +304,8 @@ Before testing our research question, we first characterised what each cluster l
 
 | Cluster | n | Mean zBMI 24m | Mean Weight 24m | Mean UPF Score | % Stunted |
 |---------|---|--------------|-----------------|----------------|-----------|
-| **1 — Higher growth** | ~160 | **+0.87** | **12.64 kg** | 0.47 | **18.8%** |
-| **2 — Lower growth** | ~133 | **−0.72** | **11.13 kg** | 0.47 | 1.4% |
+| **1 — Lower growth** | ~158 | **+-0.626** | **11.2 kg** | 0.485 | **1.9%** |
+| **2 — Higher growth** | ~124 | **+0.906** | **12.7 kg** | 0.465 | 21% |
 
 ### Does UPF Score Differ Between Clusters?
 
@@ -313,25 +315,25 @@ A one-way ANOVA tested whether mean maternal UPF score differed between the two 
 upf_anova <- aov(Ultra_processed_score ~ best_cluster, data = clean_data)
 ```
 
-![UPF Score by Cluster](outputs/figures/fig16_upf_by_cluster.jpg)
+![UPF Score by Cluster](outputs/figures/maternal UPF score_zBMI growth cluster.png)
 
-*Figure 16. Maternal UPF score by growth cluster. Both clusters show nearly identical median UPF scores (~0.47) with heavily overlapping distributions. The ANOVA was not significant (p > 0.05), indicating that maternal UPF consumption alone does not differentiate the two growth trajectory groups in this dataset.*
+*Figure 16. Maternal UPF score by growth cluster. Both clusters show nearly identical median UPF scores (~0.49 and 0.47 respectively) with heavily overlapping distributions. The ANOVA was not significant (p = 0.548), indicating that maternal UPF consumption alone does not differentiate the two growth trajectory groups in this dataset.*
 
 ### Is zBMI Meaningfully Different Between Clusters?
 
 To confirm the clusters are biologically distinct, we plot zBMI at 24 months by cluster with WHO threshold reference lines.
 
-![zBMI by Cluster](outputs/figures/fig17_zbmi_by_cluster.jpg)
+![zBMI by Cluster](outputs/figures/zBMI at 24mo by Growth Cluster.png)
 
-*Figure 17. zBMI at 24 months by growth cluster. Cluster 1 (green) has a median zBMI of ~+0.87 which is above the WHO median (z=0) but well below the overweight threshold (z=+2, orange line). Cluster 2 (orange) has a median zBMI of ~−0.72, below the population median but above the underweight threshold (z=−2, blue line). The two clusters are clearly distinct in terms of the outcome, even though UPF score does not differ between them.*
+*Figure 17. zBMI at 24 months by growth cluster. Cluster 2 (higher zBMI trajectory) has a median zBMI of ~+0.84, above the WHO median (z=0) but well below the overweight threshold (z=+2). Cluster 1 (lower zBMI trajectory) has a median zBMI of ~−0.63, below the population median but above the underweight threshold (z=−2). The two clusters are clearly distinct in terms of growth outcome, even though maternal UPF score does not differ between them.*
 
 ### Weight Trajectory by Cluster
 
 This is the key "trajectory" visualization as it shows how mean weight changes from birth to 24 months in each cluster, confirming that the groups differ not just at 24 months but consistently across the full follow-up period.
 
-![Weight Trajectory](outputs/figures/fig18_weight_trajectory.jpg)
+![Weight Trajectory](outputs/figures/plot_weight_trajectory_by_cluster.png)
 
-*Figure 18. Mean weight trajectory from birth to 24 months by cluster. Cluster 1 (red) = higher growth trajectory, reaching ~12.6 kg at 24 months. Cluster 2 (blue) = lower growth trajectory, reaching ~11.1 kg. The two groups diverge from birth and maintain distinct trajectories throughout early childhood. Error bars = ±1 SE.*
+*Figure 18. Mean weight trajectory from birth to 24 months by cluster. Cluster 2 (blue) = higher growth trajectory, reaching ~12.6 kg at 24 months. Cluster 1 (red) = lower growth trajectory, reaching ~11.1 kg. The two groups diverge from birth and maintain distinct trajectories throughout early childhood, consistent with the zBMI differences observed between clusters. Error bars = ±1 SE.*
 
 ### Cluster Profile Heatmap
 
