@@ -219,7 +219,7 @@ km_result <- kmeans(growth_scaled, centers = 2, nstart = 25)
 | **1** | -1.07 | -0.44 | **-0.626** | Lower zBMI trajectory - "leaner growth" group |
 | **2** | +1.06 | +1.93 | **+0.906** | Higher zBMI trajectory - "heavier growth" group |
 
-![K-Means PCA Plot](outputs/figures/kmeans clusters child zBMI trajectories.png)
+![K-Means PCA Plot](outputs/figures/kmeans_clusters_child_zBMI_trajectories.png)
 
 *Figure 11. K-means clusters projected onto PCA space. Each point = one child; each colour = one cluster. Cluster 1 (lower zBMI, green circles) sits to the right along PC1; Cluster 2 (higher zBMI, orange triangles) sits to the left. PC1 captures the majority of variance in growth trajectories. The overlap in the centre is consistent with a silhouette score of ~0.39 and reflects biological continuity in growth.*
 
@@ -242,7 +242,7 @@ set.seed(42)
 pam_result <- pam(growth_scaled, k = 2)
 ```
 
-![PAM Clusters](outputs/figures/PAM clusters.png)
+![PAM Clusters](outputs/figures/fig13_pam_clusters.jpg)
 
 *Figure 13. PAM cluster plot (Dim1 = 75.5% of variance). Cluster 1 (red/left) = lower zBMI group; Cluster 2 (blue/right) = higher zBMI group. Results are nearly identical to K-means, confirming the two-cluster structure is robust across methods.*
 
