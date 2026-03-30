@@ -337,7 +337,7 @@ This is the key "trajectory" visualization as it shows how mean weight changes f
 
 A summary visualization showing how all key variables compare across clusters simultaneously, with colour coding scaled within each variable for easy comparison.
 
-![Cluster Profile Heatmap](outputs/figures/fig19_cluster_heatmap.jpg)
+![Cluster Profile Heatmap](outputs/figures/plot_cluster_profile_heatmap.png)
 
 *Figure 19. Cluster profile heatmap. Red = higher value; Blue = lower value (scaled within each variable). Cluster 1 has higher zBMI, higher weight, and much higher stunting (18.8% vs 1.4%) compared to Cluster 2. Critically, **Mean UPF Score is identical across both clusters (0.47)**, shown by the symmetric red/blue pattern in the bottom row. This visually confirms that maternal UPF consumption does not separate the two growth groups.*
 
