@@ -33,7 +33,7 @@ All members contributed to this project equally.
 Ultra-processed foods (UPFs) are industrially formulated products high in sugar, saturated fat, and sodium, and low in fibre. Maternal UPF consumption during pregnancy may influence fetal programming and early childhood growth. This pipeline uses clustering methods to identify distinct growth trajectory groups in children from birth to 24 months, then tests whether a mother's UPF score predicts which group her child falls into.
 
 **Research Question:**
-> Do children of mothers with higher UPF consumption scores belong to higher-risk zBMI growth clusters, and does maternal dietary quality predict cluster membership at 24 months?
+> Is maternal UPF score associated with distinct zBMI trajectory clusters from birth to 24 months and do children of mothers with higher UPF scores belong to higher-risk zBMI growth clusters?
 
 - **Exposure:** Maternal UPF score at time of birth (continuous, range 0–1; higher = greater proportion of energy from ultra-processed foods)
 - **Outcome:** Offspring zBMI trajectory clusters (birth, 12m, 24m) and zBMI at 24 months
@@ -76,7 +76,6 @@ Mock longitudinal cohort, **n = 300** mother-child pairs.
 Key observations:
 - The mean UPF score of 0.478 indicates that on average, mothers obtained nearly half of their energy intake from ultra-processed foods, with wide individual variation (SD = 0.273)
 - The mean zBMI at 24 months is close to 0 (the WHO population median), as expected for a population-representative cohort
-- The maximum zBMI of 7.28 corresponds to the known outlier (ID 294) which exceeds the WHO +5 SD implausibility threshold and is removed during cleaning
  
 #### Additional Key Variables (from dataset documentation)
 
