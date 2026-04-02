@@ -358,17 +358,17 @@ multinom_model <- nnet::multinom(
 Covariates were selected based on biological plausibility: maternal BMI and gestational age are known predictors of early growth; sex is adjusted for because boys and girls follow different weight trajectories; household income captures socioeconomic barriers that affect both diet and growth. Full model output (odds ratios, 95% CIs, p-values) is saved in `outputs/cluster_profiles_summary.csv`.
 
 ---
-**Implications and Conclusions**
+## Implications and Conclusions
 
-## Answer to the Research Question
+### Answer to the Research Question
 Is maternal UPF score associated with distinct zBMI trajectory clusters from birth to 24 months, and do children of mothers with higher UPF scores belong to higher-risk zBMI growth clusters?
 
 No. In this dataset, maternal UPF consumption did not significantly predict zBMI growth cluster membership. The ANOVA comparing mean UPF scores between the two clusters was non-significant (F = 0.362, p = 0.548), and the multinomial logistic regression confirmed that UPF score was not a significant predictor of cluster membership after adjusting for maternal BMI, sex, gestational age, and household income index. Both clusters showed nearly identical median UPF scores (~0.47-0.49) with heavily overlapping distributions, as shown in Figures 16 and 19. 
 
-## Conclusion
+### Conclusion
 This pipeline identified two distinct infant zBMI growth trajectory clusters from birth to 24 months, a lower growth group (mean zBMI: −0.63) and a higher growth group (mean zBMI: +0.91), using K-means clustering validated across three independent methods and 26 statistical indices. Despite the clear separation between clusters, maternal UPF score did not significantly predict cluster membership (ANOVA: p = 0.548; multinomial regression: OR not significant), suggesting that ultra-processed food consumption alone is not sufficient to explain early childhood growth differences in this cohort. These null results may reflect the small sample size (n ≈ 282), the single-exposure dietary measure, or the influence of unmeasured confounders such as breastfeeding and infant feeding practices. Future work should incorporate a broader dietary exposure window, child-level diet data from 6 months onward, and multiple imputation to strengthen inferential validity.
 
-## Implications
+### Implications
 Even if no significant associatation was detected, the analysis has some meaningful clinical implications. The identification of two biologically distinct growth trajectory clusters supports a precision nutrition framework. Early trajectory grouping could help identify those at risk for growth faltering or rapid weight gain. Future research should incorporate a richer set of dietary exposures, including the child's own diet at 6 months onwards, as well as breastfeeding data, to better understand drivers of growth trajectories.
 
 ## How to Reproduce This Analysis
