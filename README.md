@@ -121,8 +121,7 @@ gg_miss_upset(data)
 | `zBMI_12m` missing (n=30, 10%) | Mean imputation | Dropping these rows would lose a key clustering variable; The mean is used because the distribution of WHO_zBMI_12m is approximately normal after outlier removal, as confirmed by histogram and Q-Q plot inspection. |
 | Other missing covariates | Retained | Not core to the primary clustering analysis |
 
-![Q-Q plot](outputs/figures/q-q plot of zbmi 12mo.png)
-
+![Q-Q plot](outputs/figures/q-q%20plot%20of%20zbmi%2012mo.png)
 ```r
 # Remove rows missing essential variables
 clean_data <- clean_data %>%
@@ -166,7 +165,7 @@ nbclust_result <- NbClust(data = growth_scaled, distance = "euclidean",
                            min.nc = 2, max.nc = 6, method = "kmeans", index = "all")
 ```
 
-![NbClust D-Index](outputs/figures/nb clust dindex.png)
+![NbClust D-Index](outputs/figures/nb%20clust%20dindex.png)
 
 *Figure 7. NbClust D-index diagnostic plots (auto-generated). Left panel: the D-index decreases steadily as k increases from 2 to 6, with the lowest value at k=6. Right panel: the second differences peak at k=3, indicating the most meaningful change in cluster quality improvement occurs between k=2 and k=3, confirming k=2 as the optimal solution*
 
@@ -218,7 +217,7 @@ km_result <- kmeans(growth_scaled, centers = 2, nstart = 25)
 | **1** | -1.07 | -0.44 | **-0.626** | Lower zBMI trajectory - "leaner growth" group |
 | **2** | +1.06 | +1.93 | **+0.906** | Higher zBMI trajectory - "heavier growth" group |
 
-![K-Means PCA Plot](outputs/figures/kmeans_clusters_child_zBMI_trajectories.png)
+![K-Means PCA Plot](outputs/figures/kmeans%20clusters%20child%20zBMI%20trajectories.png)
 
 *Figure 11. K-means clusters projected onto PCA space. Each point = one child; each colour = one cluster. Cluster 1 (lower zBMI, green circles) sits to the right along PC1; Cluster 2 (higher zBMI, orange triangles) sits to the left. PC1 captures the majority of variance in growth trajectories. The overlap in the centre is consistent with a silhouette score of ~0.39 and reflects biological continuity in growth.*
 
@@ -314,7 +313,7 @@ A one-way ANOVA tested whether mean maternal UPF score differed between the two 
 upf_anova <- aov(Ultra_processed_score ~ best_cluster, data = clean_data)
 ```
 
-![UPF Score by Cluster](outputs/figures/maternal UPF score_zBMI growth cluster.png)
+![UPF Score by Cluster](outputs/figures/maternal%20UPF%20score_zBMI%20growth%20cluster.png)
 
 *Figure 16. Maternal UPF score by growth cluster. Both clusters show nearly identical median UPF scores (~0.49 and 0.47 respectively) with heavily overlapping distributions. The ANOVA was not significant (p = 0.548), indicating that maternal UPF consumption alone does not differentiate the two growth trajectory groups in this dataset.*
 
@@ -322,7 +321,7 @@ upf_anova <- aov(Ultra_processed_score ~ best_cluster, data = clean_data)
 
 To confirm the clusters are biologically distinct, we plot zBMI at 24 months by cluster with WHO threshold reference lines.
 
-![zBMI by Cluster](outputs/figures/zBMI at 24mo by Growth Cluster.png)
+![zBMI by Cluster](outputs/figures/zBMI%20at%2024mo%20by%20Growth%20Cluster.png)
 
 *Figure 17. zBMI at 24 months by growth cluster. Cluster 2 (higher zBMI trajectory) has a median zBMI of ~+0.84, above the WHO median (z=0) but well below the overweight threshold (z=+2). Cluster 1 (lower zBMI trajectory) has a median zBMI of ~−0.63, below the population median but above the underweight threshold (z=−2). The two clusters are clearly distinct in terms of growth outcome, even though maternal UPF score does not differ between them.*
 
